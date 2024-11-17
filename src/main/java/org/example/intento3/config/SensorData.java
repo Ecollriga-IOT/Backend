@@ -5,6 +5,8 @@ public class SensorData {
     private double temperature;
 
     // Getters y Setters
+    public SensorData() {}
+
 
     public double getHumidity() {
         return humidity;
@@ -21,4 +23,12 @@ public class SensorData {
     public void setTemperature(double temperature) {
         this.temperature = temperature;
     }
+    @Override
+    public String toString() {
+        return "SensorData{" +
+                "temperature=" + temperature +
+                ", humidity=" + humidity +
+                '}';
+    }
+
 }
