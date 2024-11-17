@@ -9,6 +9,9 @@ import org.example.intento3.model.CropField;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.example.intento3.model.Roles;
+
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,4 +26,6 @@ public class UserDto {
     private LocalDate userBirthDate;
     private String imageData;
     private List<CropField> cropFields;
+    //el rol
+    private Roles role;
 }

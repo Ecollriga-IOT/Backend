@@ -26,7 +26,7 @@ public class CropFieldController {
         this.cropFieldRepository = cropFieldRepository;
     }
 
-    // URL: http://localhost:8080/api/smartsprout/v1/cropfields
+    // URL: http://localhost:8080/api/regadiot/v1/cropfields
     // Method: GET
     @Transactional(readOnly = true)
     @GetMapping("/{cropFieldId}")
@@ -37,7 +37,7 @@ public class CropFieldController {
         return new ResponseEntity<CropFieldDto>(cropFieldDto, HttpStatus.OK);
     }
 
-    // URL: http://localhost:8080/api/smartsprout/v1/cropfield/{userId}
+    // URL: http://localhost:8080/api/regadiot/v1/cropfield/{userId}
     // Method: GET
     @Transactional(readOnly = true)
     @GetMapping("/user/{userId}")
@@ -48,7 +48,7 @@ public class CropFieldController {
                 .collect(Collectors.toList()), HttpStatus.OK);
     }
 
-    // URL: http://localhost:8080/api/smartsprout/v1/cropfield/user/{userId}
+    // URL: http://localhost:8080/api/regadiot/v1/cropfield/user/{userId}
     // Method: POST
     @Transactional
     @PostMapping("/user/{userId}")
@@ -58,7 +58,7 @@ public class CropFieldController {
         return new ResponseEntity<CropFieldDto>(cropFieldDtoResponse, HttpStatus.CREATED);
     }
 
-    // URL: http://localhost:8080/api/smartsprout/v1/cropfields/{cropFieldId}
+    // URL: http://localhost:8080/api/regadiot/v1/cropfields/{cropFieldId}
     // Method: PUT
     @Transactional
     @PutMapping("/{cropFieldId}")
@@ -69,7 +69,7 @@ public class CropFieldController {
         return new ResponseEntity<CropFieldDto>(cropFieldDtoResponse, HttpStatus.OK);
     }
 
-    // URL: http://localhost:8080/api/smartsprout/v1/cropfields/{cropFieldId}
+    // URL: http://localhost:8080/api/regadiot/v1/cropfields/{cropFieldId}
     // Method: DELETE
     @Transactional
     @DeleteMapping("/{cropFieldId}")

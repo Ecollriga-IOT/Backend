@@ -80,6 +80,7 @@ public class UserController {
                 .userBirthDate(user.getUserBirthDate())
                 .imageData(user.getImageData())
                 .cropFields(user.getCropFields())
+                .role(user.getRole())
                 .build();
     }
 

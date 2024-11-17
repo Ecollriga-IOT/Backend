@@ -3,7 +3,6 @@ package org.example.intento3.service.impl;
 
 import org.example.intento3.exception.ValidationException;
 import org.example.intento3.model.User;
-import org.example.intento3.repository.TempDataSensorRepository;
 import org.example.intento3.repository.UserRepository;
 import org.example.intento3.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +14,9 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private TempDataSensorRepository tempDataSensorRepository;
-
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
     @Override
     public User createUser(User user) {
         userRepository.save(user);

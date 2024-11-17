@@ -7,7 +7,6 @@ import org.example.intento3.dto.RegisterRequest;
 import org.example.intento3.exception.ValidationException;
 import org.example.intento3.model.Roles;
 import org.example.intento3.model.User;
-import org.example.intento3.repository.TempDataSensorRepository;
 import org.example.intento3.repository.UserRepository;
 import org.example.intento3.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,7 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private TempDataSensorRepository tempDataSensorRepository;
+
 
 
 

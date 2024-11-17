@@ -40,7 +40,6 @@ public class CropFieldServiceImpl implements CropFieldService {
         cropField.setUser(userService.getUserById(userId));
         validateCropField(cropField);
         cropFieldRepository.save(cropField);
-        ioTSensorService.saveIrrigationSuggestion(cropField.getId());
         return cropField;
     }
 

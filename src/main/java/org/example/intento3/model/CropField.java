@@ -73,8 +73,6 @@ public class CropField {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private User user;
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "cropField", cascade = CascadeType.ALL, orphanRemoval = true)
-    private IrrigationSuggestion irrigationSuggestion;
+
 
 }

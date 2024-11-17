@@ -1,85 +1,46 @@
 package org.example.intento3.service.impl;
 
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.example.intento3.dto.IdealConditionsDto;
-import org.example.intento3.dto.IrrigationSuggestionDto;
-import org.example.intento3.dto.IrrigationSuggestionResponse;
 import org.example.intento3.dto.ManageConfigurationSensorDto;
 import org.example.intento3.exception.ResourceNotFoundException;
 import org.example.intento3.model.CropField;
-import org.example.intento3.model.IrrigationSuggestion;
-import org.example.intento3.model.TempDataSensor;
 import org.example.intento3.repository.CropFieldRepository;
-import org.example.intento3.repository.IrrigationSuggestionRepository;
-import org.example.intento3.repository.TempDataSensorRepository;
 import org.example.intento3.service.IoTSensorService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class IoTSensorServiceImpl implements IoTSensorService {
     private final CropFieldRepository cropFieldRepository;
-    private final TempDataSensorRepository tempDataSensorRepository;
-    private final IrrigationSuggestionRepository irrigationSuggestionRepository;
+    @Autowired
+    private MQTTService mqttService;
 
-    public IoTSensorServiceImpl(CropFieldRepository cropFieldRepository, TempDataSensorRepository tempDataSensorRepository, IrrigationSuggestionRepository irrigationSuggestionRepository) {
+    public IoTSensorServiceImpl(CropFieldRepository cropFieldRepository, MQTTService mqttService) {
         this.cropFieldRepository = cropFieldRepository;
-        this.tempDataSensorRepository = tempDataSensorRepository;
-        this.irrigationSuggestionRepository = irrigationSuggestionRepository;
+
+        this.mqttService = mqttService;
+    }
+    public void subscribeToSensorData(Long cropFieldId) {
+        CropField cropField = cropFieldRepository.findById(cropFieldId)
+                .orElseThrow(() -> new ResourceNotFoundException("Campo de cultivo no encontrado"));
+
+
     }
 
-    @Override
-    public IdealConditionsDto getIdealConditions(Long cropFieldId) {
-        CropField cropField = cropFieldRepository.findById(cropFieldId).orElseThrow(() -> new ResourceNotFoundException("CropField not found"));
-        return IdealConditionsDto.builder()
-                .idealTemperature(cropField.getIdealTemperature())
-                .idealHumidity(cropField.getIdealHumidity())
-                .build();
+    // Método para manejar los datos recibidos del sensor
+    private void handleSensorData(Long cropFieldId, MqttMessage message) {
+        // Aquí debes procesar los datos del sensor, por ejemplo:
+        String payload = new String(message.getPayload());
+        String[] data = payload.split(",");
+        if (data.length == 2) {
+            double temperature = Double.parseDouble(data[0]);
+            double humidity = Double.parseDouble(data[1]);
+
+        }
     }
 
-    @Override
-    public ManageConfigurationSensorDto manageConfigurationSensor() {
-        TempDataSensor tempDataSensor = tempDataSensorRepository.findById(1L).orElseThrow(() -> new ResourceNotFoundException("TempDataSensor not found"));
-        CropField cropField = cropFieldRepository.findById(tempDataSensor.getCropFieldId()).orElseThrow(() -> new ResourceNotFoundException("CropField not found"));
-        cropField.setIrrigation(tempDataSensor.isIrrigation());
-        cropFieldRepository.save(cropField);
-        return ManageConfigurationSensorDto.builder()
-                .cropFieldId(tempDataSensor.getCropFieldId())
-                .isIrrigation(tempDataSensor.isIrrigation())
-                .build();
-    }
 
-    @Override
-    public IrrigationSuggestion saveIrrigationSuggestion(Long cropFieldId) {
-        CropField cropField = cropFieldRepository.findById(cropFieldId).orElseThrow(() -> new ResourceNotFoundException("CropField not found"));
-        IrrigationSuggestion irrigationSuggestion = IrrigationSuggestion.builder()
-                .cropField(cropField)
-                .actualHumidity(0)
-                .actualTemperature(0)
-                .isIrrigation(false)
-                .build();
-        return irrigationSuggestionRepository.save(irrigationSuggestion);
-    }
 
-    @Override
-    public IrrigationSuggestionDto updateIrrigationSuggestion(IrrigationSuggestionDto irrigationSuggestionDto) {
-        IrrigationSuggestion irrigationSuggestion = irrigationSuggestionRepository.findByCropFieldId(irrigationSuggestionDto.getCropFieldId());
-        irrigationSuggestion.setActualHumidity(irrigationSuggestionDto.getActualHumidity());
-        irrigationSuggestion.setActualTemperature(irrigationSuggestionDto.getActualTemperature());
-        irrigationSuggestionRepository.save(irrigationSuggestion);
-        return IrrigationSuggestionDto.builder()
-                .cropFieldId(irrigationSuggestion.getCropField().getId())
-                .actualHumidity(irrigationSuggestion.getActualHumidity())
-                .actualTemperature(irrigationSuggestion.getActualTemperature())
-                .isIrrigation(irrigationSuggestion.isIrrigation())
-                .build();
-    }
 
-    @Override
-    public IrrigationSuggestionResponse getIrrigationSuggestion(Long cropFieldId) {
-        IrrigationSuggestion irrigationSuggestion = irrigationSuggestionRepository.findByCropFieldId(cropFieldId);
-        return IrrigationSuggestionResponse.builder()
-                .actualHumidity(irrigationSuggestion.getActualHumidity())
-                .actualTemperature(irrigationSuggestion.getActualTemperature())
-                .isIrrigation(irrigationSuggestion.isIrrigation())
-                .build();
-    }
 }
